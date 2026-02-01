@@ -14,11 +14,15 @@ This tool addresses the cognitive, structural, and procedural gaps citizens face
 - ✅ **Rule-Based Structure**: Deterministic document formatting per legal standards
 - ✅ **AI Intent Inference**: Smart detection of document type and requirements
 - ✅ **Authority Suggestions**: Get recommendations for the right government office
-- ✅ **Bilingual Support**: English and Hindi
+- ✅ **Bilingual Support**: English and Hindi (with Hindi templates)
 - ✅ **Tone Selection**: Neutral, Formal, or Strict but Polite
 - ✅ **Editable Preview**: Full control over final document
 - ✅ **Submission Guidance**: Step-by-step instructions for filing
 - ✅ **Multi-format Export**: PDF, DOCX, and XLSX download options
+- ✅ **Draft Quality Score**: Grade your draft with improvement suggestions
+- ✅ **PII Detection**: Warns about sensitive data in your input
+- ✅ **Draft History**: Undo/redo with version tracking
+- ✅ **Accessibility**: WCAG 2.1 AA compliant
 
 ## 🏗️ Architecture
 
@@ -32,11 +36,11 @@ This tool addresses the cognitive, structural, and procedural gaps citizens face
 
 | Layer | Technology |
 |-------|------------|
-| **Frontend** | React 19, React Router DOM, Axios |
-| **Backend** | FastAPI, Uvicorn, Pydantic |
-| **NLP/AI** | spaCy, DistilBERT (Transformers), scikit-learn |
+| **Frontend** | React 19, React Router DOM 7, Axios, Lucide Icons |
+| **Backend** | FastAPI, Uvicorn, Pydantic v2, Loguru |
+| **NLP/AI** | spaCy 3.8.11, DistilBERT (Transformers), scikit-learn |
 | **Document Generation** | ReportLab (PDF), python-docx (DOCX), openpyxl (XLSX) |
-| **Language Support** | Indic NLP Library, langdetect |
+| **Language Support** | langdetect, regex, unidecode |
 
 ---
 
@@ -45,17 +49,27 @@ This tool addresses the cognitive, structural, and procedural gaps citizens face
 ```
 AI-Powered-Public-Complaint-RTI-Generator/
 │
-├── frontend/                                   # React Frontend
+├── frontend/                                   # React 19 Frontend
 │   ├── public/
 │   │   └── index.html
 │   │
 │   ├── src/
-│   │   ├── components/
+│   │   ├── components/                        # 15 Reusable Components
 │   │   │   ├── ApplicantForm/                 # User details + issue input
-│   │   │   ├── DraftPreview/                  # Shows generated RTI / Complaint
-│   │   │   ├── SubmissionGuidancePanel/       # How & where to submit
+│   │   │   ├── CharacterLimitIndicator/       # Real-time character count
 │   │   │   ├── ConfidenceNotice/              # AI confidence + user confirmation
-│   │   │   └── DownloadPanel/                 # PDF / DOCX / XLSX download
+│   │   │   ├── ConstrainedDraftEditor/        # Template-aware editing
+│   │   │   ├── DownloadPanel/                 # PDF / DOCX / XLSX download
+│   │   │   ├── DraftHistoryPanel/             # Version history & undo/redo
+│   │   │   ├── DraftPreview/                  # Shows generated RTI / Complaint
+│   │   │   ├── ExplainWhyPanel/               # AI decision transparency
+│   │   │   ├── LoadingState/                  # Loading indicators
+│   │   │   ├── PIIWarning/                    # Sensitive data alerts
+│   │   │   ├── PrivacyControls/               # Data management options
+│   │   │   ├── QualityScore/                  # Draft quality grading
+│   │   │   ├── StructuredRTIForm/             # RTI-specific form
+│   │   │   ├── SubmissionGuidancePanel/       # How & where to submit
+│   │   │   └── ValidatedInput/                # Input with validation
 │   │   │
 │   │   ├── layouts/
 │   │   │   └── MainLayout/                    # Header, footer, container
@@ -65,10 +79,13 @@ AI-Powered-Public-Complaint-RTI-Generator/
 │   │   │   ├── GuidedMode/                    # Rule-first (minimal AI)
 │   │   │   └── AssistedMode/                  # NLP-assisted mode
 │   │   │
-│   │   ├── services/
+│   │   ├── services/                          # 6 API Services
+│   │   │   ├── apiClient.js                   # Centralized HTTP client
 │   │   │   ├── inferenceService.js            # Calls /infer API
 │   │   │   ├── draftService.js                # Calls /draft API
-│   │   │   └── authorityService.js            # Calls /authority API
+│   │   │   ├── authorityService.js            # Calls /authority API
+│   │   │   ├── validationService.js           # Calls /validate API
+│   │   │   └── draftHistoryService.js         # Local storage history
 │   │   │
 │   │   ├── hooks/
 │   │   │   └── useDebounce.js
@@ -79,14 +96,18 @@ AI-Powered-Public-Complaint-RTI-Generator/
 │   │   ├── App.js
 │   │   ├── App.css
 │   │   ├── index.js
-│   │   └── index.css
+│   │   ├── index.css
+│   │   ├── accessibility.css                  # WCAG 2.1 AA styles
+│   │   └── print.css                          # Print-optimized styles
 │   │
 │   ├── package.json
 │   └── README.md
 │
-├── backend/                                    # Python Backend (FastAPI, stateless)
+├── backend/                                    # Python Backend (FastAPI)
 │   ├── app/
 │   │   ├── main.py                            # FastAPI entry point
+│   │   ├── middleware.py                      # Request logging middleware
+│   │   ├── config.py                          # Environment configuration
 │   │   │
 │   │   ├── api/                               # HTTP routes
 │   │   │   ├── infer.py                       # Intent + NLP inference
@@ -108,54 +129,63 @@ AI-Powered-Public-Complaint-RTI-Generator/
 │   │   │   ├── authority_resolver.py          # Deterministic authority logic
 │   │   │   ├── draft_assembler.py             # Fills legal templates
 │   │   │   ├── document_generator.py          # PDF / DOCX / XLSX creation
-│   │   │   └── audit_logger.py                # Explainability & decision logs
+│   │   │   └── inference_orchestrator.py      # Orchestrates NLP pipeline
 │   │   │
-│   │   ├── schemas/                           # Pydantic request/response contracts
+│   │   ├── schemas/                           # Pydantic request/response
 │   │   │   ├── applicant.py
 │   │   │   ├── issue.py
-│   │   │   ├── inference.py                   # Intent + confidence schema
+│   │   │   ├── inference.py
 │   │   │   └── draft.py
 │   │   │
 │   │   ├── templates/                         # NON-AI legal content
 │   │   │   ├── rti/
 │   │   │   │   ├── information_request.txt
+│   │   │   │   ├── information_request_hindi.txt
 │   │   │   │   ├── records_request.txt
+│   │   │   │   ├── records_request_hindi.txt
 │   │   │   │   └── inspection_request.txt
 │   │   │   │
 │   │   │   └── complaint/
 │   │   │       ├── grievance.txt
+│   │   │       ├── grievance_hindi.txt
 │   │   │       ├── escalation.txt
+│   │   │       ├── escalation_hindi.txt
 │   │   │       └── follow_up.txt
 │   │   │
-│   │   ├── utils/
-│   │   │   ├── language_normalizer.py         # Indian language cleanup
-│   │   │   ├── text_sanitizer.py              # PII safety + cleanup
-│   │   │   └── tone.py                        # Neutral / assertive tone
-│   │   │
-│   │   └── config.py                          # Env + app config
+│   │   └── utils/
+│   │       ├── language_normalizer.py
+│   │       ├── text_sanitizer.py
+│   │       └── tone.py
 │   │
+│   ├── tests/                                 # 130 Unit Tests
+│   │   ├── test_confidence_gate.py            # 26 tests
+│   │   ├── test_distilbert_semantic.py        # 20 tests
+│   │   ├── test_intent_rules.py               # 20 tests
+│   │   ├── test_issue_rules.py                # 18 tests
+│   │   ├── test_legal_triggers.py             # 22 tests
+│   │   ├── test_spacy_engine.py               # 24 tests
+│   │   └── conftest.py
+│   │
+│   ├── test_api.py                            # 12 API Integration Tests
 │   ├── requirements.txt
+│   ├── pytest.ini
 │   └── README.md
 │
-├── ml/                                        # 🔒 MODEL ASSETS ONLY (NO LOGIC)
-│   ├── spacy/
-│   │   ├── custom_ner/                        # Trained entities (ORG, DEPT, DATE)
-│   │   └── patterns/                          # Phrase & matcher rules
-│   │
-│   ├── distilbert/
-│   │   └── embeddings_cache/                  # Optional caching
-│   │
-│   └── MODEL_USAGE_POLICY.md                  # 🚨 Non-negotiable AI rules
+├── ml/                                        # 🔒 MODEL ASSETS ONLY
+│   ├── model_manager.py
+│   ├── MODEL_USAGE_POLICY.md
+│   └── requirements.txt
 │
-├── docs/                                      # Documentation & justification
-│   ├── architecture.md                        # System overview
-│   ├── decision_flow.md                       # Rule → NLP → fallback flow
-│   ├── ai_safety_notes.md                     # Why AI is bounded
-│   ├── privacy_policy.md                      # No-DB, no-storage explanation
-│   └── future_scope.md                        # Clearly marked optional features
+├── docs/                                      # Documentation
+│   ├── architecture.md
+│   ├── decision_flow.md
+│   ├── ai_safety_notes.md
+│   ├── privacy_policy.md
+│   └── future_scope.md
 │
-├── .env.example                               # Environment variables template
-├── README.md                                  # Project overview
+├── doc.md                                     # Development log
+├── README.md                                  # This file
+├── pyrightconfig.json
 └── LICENSE
 ```
 
@@ -163,52 +193,51 @@ AI-Powered-Public-Complaint-RTI-Generator/
 
 ## 📦 Requirements
 
-### Backend (Python)
+### Backend (Python 3.10+)
 
 ```txt
 # Core Framework
-fastapi
-uvicorn[standard]
-pydantic
+fastapi>=0.109.0
+uvicorn[standard]>=0.27.0
+pydantic>=2.0.0
 python-dotenv
 loguru
 
 # NLP & AI
-spacy
-spacy-lookups-data
-transformers
-torch
+spacy>=3.8.0
+transformers>=4.35.0
+torch>=2.1.0
 numpy
 scikit-learn
 
-# Indic Language Support
-indic-nlp-library
+# Language Support
 langdetect
 regex
 unidecode
 python-dateutil
 
 # Document Generation
-reportlab
-python-docx
-openpyxl
+reportlab>=4.0.0
+python-docx>=1.1.0
+openpyxl>=3.1.0
 aiofiles
 
 # Testing
-pytest
+pytest>=8.0.0
+httpx  # For FastAPI TestClient
 ```
 
-### Frontend (Node.js)
+### Frontend (Node.js 18+)
 
 ```json
 {
   "dependencies": {
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-router-dom": "^6.x",
-    "axios": "^1.x",
-    "react-toastify": "^10.x",
-    "file-saver": "^2.x"
+    "react-router-dom": "^7.1.0",
+    "axios": "^1.7.9",
+    "lucide-react": "^0.473.0",
+    "file-saver": "^2.0.5"
   }
 }
 ```
@@ -219,8 +248,8 @@ pytest
 
 ### Prerequisites
 - **Node.js** v18+ (for frontend)
-- **Python** 3.10+ (for backend)
-- **pip** or **conda** for Python packages
+- **Python** 3.10+ (3.13 recommended)
+- **pip** for Python packages
 
 ### Backend Setup
 
@@ -228,10 +257,13 @@ pytest
 # Navigate to backend directory
 cd backend
 
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-venv\Scripts\activate     # Windows
+# Create virtual environment (Windows)
+py -3.13 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+
+# Create virtual environment (Linux/Mac)
+python3.13 -m venv .venv
+source .venv/bin/activate
 
 # Install dependencies
 pip install -r requirements.txt
@@ -239,11 +271,14 @@ pip install -r requirements.txt
 # Download spaCy model
 python -m spacy download en_core_web_sm
 
-# Copy environment file
-cp ../.env.example .env
-
 # Start the server
 uvicorn app.main:app --reload --port 8000
+
+# Run unit tests (130 tests)
+pytest tests/ -v
+
+# Run API integration tests (12 tests)
+python test_api.py
 ```
 
 ### Frontend Setup
@@ -257,7 +292,16 @@ npm install
 
 # Start development server
 npm start
+
+# Build for production
+npm run build
 ```
+
+### Access Points
+- **Frontend**: [http://localhost:3000](http://localhost:3000)
+- **Backend API**: [http://localhost:8000](http://localhost:8000)
+- **Swagger UI**: [http://localhost:8000/docs](http://localhost:8000/docs)
+- **ReDoc**: [http://localhost:8000/redoc](http://localhost:8000/redoc)
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
@@ -290,12 +334,39 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 | Endpoint | Method | Description |
 |----------|--------|-------------|
+| `/health` | GET | Health check |
 | `/api/infer` | POST | Analyze text and infer intent/document type |
 | `/api/draft` | POST | Generate draft document |
 | `/api/authority` | POST | Get authority suggestions |
-| `/api/download/pdf` | POST | Export as PDF |
-| `/api/download/docx` | POST | Export as DOCX |
-| `/api/download/xlsx` | POST | Export as XLSX |
+| `/api/download` | POST | Export as PDF/DOCX/XLSX |
+| `/api/validate/rti` | POST | Validate RTI draft quality |
+| `/api/validate/edit` | POST | Validate edit suggestions |
+
+---
+
+## 🧪 Testing
+
+### Unit Tests (130 tests)
+```bash
+cd backend
+pytest tests/ -v --tb=short
+```
+
+### API Integration Tests (12 tests)
+```bash
+cd backend
+python test_api.py
+```
+
+### Test Coverage
+| Test File | Tests | Coverage |
+|-----------|-------|----------|
+| `test_confidence_gate.py` | 26 | Confidence thresholds |
+| `test_distilbert_semantic.py` | 20 | Semantic similarity |
+| `test_intent_rules.py` | 20 | Intent classification |
+| `test_issue_rules.py` | 18 | Issue categorization |
+| `test_legal_triggers.py` | 22 | Legal citation detection |
+| `test_spacy_engine.py` | 24 | NER entity extraction |
 
 ---
 
@@ -360,8 +431,28 @@ This project is created for educational and civic purposes.
 - [ ] Mobile app (React Native)
 - [ ] Integration with government portals
 - [ ] Appeal tracking system
-- [ ] Community-contributed templates
+- [ ] Docker containerization
+- [ ] CI/CD pipeline
+- [ ] Cloud deployment
+
+---
+
+## 📊 Project Status
+
+| Feature | Status |
+|---------|--------|
+| Backend API | ✅ Complete |
+| Frontend UI | ✅ Complete |
+| Unit Tests (130) | ✅ Passing |
+| API Tests (12) | ✅ Passing |
+| Hindi Support | ✅ Complete |
+| Accessibility | ✅ WCAG 2.1 AA |
+| Documentation | ✅ Complete |
 
 ---
 
 **Built with ❤️ for the citizens of India**
+
+**Last Updated:** February 1, 2026  
+**Author:** Anurag Mishra  
+**Project:** GSoC - AI-Powered Public Complaint and RTI Generator
