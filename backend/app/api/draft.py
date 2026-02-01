@@ -16,6 +16,7 @@ from loguru import logger
 
 from app.services.draft_assembler import get_draft_assembler, DocumentType
 from app.services.inference_orchestrator import IntentType
+from app.services.nlp import translate_to_hindi
 from app.utils.text_sanitizer import clean_input, warn_about_pii
 from app.utils.tone import suggest_tone
 from app.config import get_settings
@@ -244,23 +245,52 @@ async def generate_draft(request: DraftRequest) -> DraftResponse:
         # Get assembler
         assembler = get_draft_assembler()
         
+        # Normalize language
+        language = request.language.lower() if request.language else "english"
+        if language not in ["english", "hindi"]:
+            language = "english"
+        
+        # Translation logic
+        final_description = cleaned_description
+        final_specific = cleaned_specific
+        
+        if language == "hindi":
+             try:
+                 from app.utils.language_normalizer import detect_language
+                 # Try to detect if input is English and wants Hindi output
+                 if detect_language(cleaned_description) != "hi":
+                     logger.info("Translating description to Hindi")
+                     trans_desc = translate_to_hindi(cleaned_description)
+                     if trans_desc:
+                         final_description = trans_desc
+                         
+                 if cleaned_specific and detect_language(cleaned_specific) != "hi":
+                     logger.info("Translating specific request to Hindi")
+                     trans_spec = translate_to_hindi(cleaned_specific)
+                     if trans_spec:
+                         final_specific = trans_spec
+             except Exception as e:
+                 logger.error(f"Translation preprocessing failed: {e}")
+                 # Fallback to original text matches behavior if translation service fails
+        
         # Generate draft
         result = assembler.assemble_draft(
             document_type=doc_type,
             applicant_name=request.applicant.name,
             applicant_address=request.applicant.address,
             applicant_state=request.applicant.state,
-            issue_description=cleaned_description,
+            issue_description=final_description,
             applicant_phone=request.applicant.phone,
             applicant_email=request.applicant.email,
             department_name=authority.department_name,
             department_address=authority.department_address,
             authority_designation=authority.designation,
-            specific_request=cleaned_specific,
+            specific_request=final_specific,
             time_period=request.issue.time_period,
             issue_category=request.issue.category,
             additional_context=additional,
-            tone=request.tone
+            tone=request.tone,
+            language=language
         )
         
         # Build suggestions
@@ -270,10 +300,17 @@ async def generate_draft(request: DraftRequest) -> DraftResponse:
             suggestions.append(f"Some fields need your attention: {', '.join(result['placeholders_missing'][:3])}")
         
         if doc_type in [DocumentType.INFORMATION_REQUEST, DocumentType.RECORDS_REQUEST, DocumentType.INSPECTION_REQUEST]:
-            suggestions.append("Remember to attach RTI fee of Rs. 10/- via IPO/DD/Online")
-            suggestions.append("Keep a copy of this application for your records")
+            if language == "hindi":
+                suggestions.append("आरटीआई शुल्क रु. 10/- आईपीओ/डीडी/ऑनलाइन के माध्यम से संलग्न करें")
+                suggestions.append("अपने रिकॉर्ड के लिए इस आवेदन की एक प्रति रखें")
+            else:
+                suggestions.append("Remember to attach RTI fee of Rs. 10/- via IPO/DD/Online")
+                suggestions.append("Keep a copy of this application for your records")
         else:
-            suggestions.append("Keep the acknowledgment/reference number for follow-up")
+            if language == "hindi":
+                suggestions.append("अनुवर्ती कार्रवाई के लिए पावती/संदर्भ संख्या रखें")
+            else:
+                suggestions.append("Keep the acknowledgment/reference number for follow-up")
         
         # Build response
         response = DraftResponse(

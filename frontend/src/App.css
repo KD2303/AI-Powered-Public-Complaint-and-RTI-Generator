@@ -1,3 +1,7 @@
+/* Import accessibility and print styles */
+@import './styles/accessibility.css';
+@import './styles/print.css';
+
 .App {
   min-height: 100vh;
   display: flex;
