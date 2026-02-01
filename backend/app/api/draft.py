@@ -244,6 +244,11 @@ async def generate_draft(request: DraftRequest) -> DraftResponse:
         # Get assembler
         assembler = get_draft_assembler()
         
+        # Normalize language
+        language = request.language.lower() if request.language else "english"
+        if language not in ["english", "hindi"]:
+            language = "english"
+        
         # Generate draft
         result = assembler.assemble_draft(
             document_type=doc_type,
@@ -260,7 +265,8 @@ async def generate_draft(request: DraftRequest) -> DraftResponse:
             time_period=request.issue.time_period,
             issue_category=request.issue.category,
             additional_context=additional,
-            tone=request.tone
+            tone=request.tone,
+            language=language
         )
         
         # Build suggestions
@@ -270,10 +276,17 @@ async def generate_draft(request: DraftRequest) -> DraftResponse:
             suggestions.append(f"Some fields need your attention: {', '.join(result['placeholders_missing'][:3])}")
         
         if doc_type in [DocumentType.INFORMATION_REQUEST, DocumentType.RECORDS_REQUEST, DocumentType.INSPECTION_REQUEST]:
-            suggestions.append("Remember to attach RTI fee of Rs. 10/- via IPO/DD/Online")
-            suggestions.append("Keep a copy of this application for your records")
+            if language == "hindi":
+                suggestions.append("आरटीआई शुल्क रु. 10/- आईपीओ/डीडी/ऑनलाइन के माध्यम से संलग्न करें")
+                suggestions.append("अपने रिकॉर्ड के लिए इस आवेदन की एक प्रति रखें")
+            else:
+                suggestions.append("Remember to attach RTI fee of Rs. 10/- via IPO/DD/Online")
+                suggestions.append("Keep a copy of this application for your records")
         else:
-            suggestions.append("Keep the acknowledgment/reference number for follow-up")
+            if language == "hindi":
+                suggestions.append("अनुवर्ती कार्रवाई के लिए पावती/संदर्भ संख्या रखें")
+            else:
+                suggestions.append("Keep the acknowledgment/reference number for follow-up")
         
         # Build response
         response = DraftResponse(

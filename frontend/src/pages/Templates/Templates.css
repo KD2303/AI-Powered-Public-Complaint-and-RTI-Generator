@@ -63,6 +63,12 @@
 .category-filters {
   display: flex;
   gap: 0.5rem;
+  align-items: center;
+}
+
+.filter-divider {
+  color: var(--color-border);
+  margin: 0 0.25rem;
 }
 
 .filter-btn {
@@ -75,6 +81,18 @@
   color: var(--color-text-body);
   cursor: pointer;
   transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.filter-btn.lang-btn {
+  background: var(--color-surface-light);
+}
+
+.filter-btn.lang-btn.active {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
 }
 
 .filter-btn:hover {

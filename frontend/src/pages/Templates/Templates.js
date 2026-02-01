@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FileText, Search, Copy, ArrowRight, Building2, Zap, Droplets, MapPin, Shield, HeartPulse, GraduationCap, Train } from 'lucide-react';
+import { FileText, Search, Copy, ArrowRight, Building2, Zap, Droplets, MapPin, Shield, HeartPulse, GraduationCap, Train, Globe } from 'lucide-react';
 import { toast } from 'react-toastify';
 import './Templates.css';
 
@@ -168,24 +168,165 @@ I request immediate action to:
 5. Details of passenger amenities available and planned improvements
 6. Criteria for ticket reservation quota allocation`,
     tags: ['railway', 'trains', 'station', 'transport']
+  },
+  // Hindi Templates
+  {
+    id: 'rti-pwd-roads-hindi',
+    category: 'RTI',
+    department: 'लोक निर्माण विभाग (PWD)',
+    icon: MapPin,
+    title: 'सड़क निर्माण व्यय - हिंदी',
+    description: 'सड़क निर्माण लागत, ठेकेदार जानकारी और परियोजना समयसीमा के बारे में विवरण का अनुरोध करें।',
+    language: 'hindi',
+    sampleText: `मैं [आपका क्षेत्र] में [समय अवधि] के दौरान किए गए सड़क निर्माण/मरम्मत कार्य का पूर्ण विवरण जानना चाहता/चाहती हूं। कृपया निम्नलिखित जानकारी प्रदान करें:
+
+1. परियोजना के लिए स्वीकृत कुल बजट
+2. कार्य प्रदान किए गए ठेकेदार का नाम और पता
+3. कार्य प्रारंभ और समाप्ति की तिथि
+4. मदवार व्यय विवरण
+5. गुणवत्ता निरीक्षण रिपोर्ट, यदि कोई हो
+6. कार्य पूर्णता प्रमाण पत्र की प्रतियां`,
+    tags: ['सड़क', 'निर्माण', 'बजट', 'ठेकेदार', 'hindi']
+  },
+  {
+    id: 'rti-electricity-hindi',
+    category: 'RTI',
+    department: 'विद्युत विभाग',
+    icon: Zap,
+    title: 'बिजली कनेक्शन और बिल - हिंदी',
+    description: 'बिजली कनेक्शन, मीटर रीडिंग और बिलिंग विवरण के बारे में जानकारी का अनुरोध करें।',
+    language: 'hindi',
+    sampleText: `मैं [आपका क्षेत्र/उपभोक्ता संख्या] में बिजली आपूर्ति के संबंध में निम्नलिखित जानकारी का अनुरोध करता/करती हूं:
+
+1. घरेलू/वाणिज्यिक उपभोक्ताओं पर लागू बिजली टैरिफ का विवरण
+2. लोड स्वीकृति और कनेक्शन अनुमोदन के मानदंड
+3. पिछले 6 महीनों में बिजली कटौती का विवरण कारणों सहित
+4. उपभोक्ताओं को प्रदान की गई सब्सिडी राशि, यदि कोई हो
+5. शिकायत दर्ज करने की प्रक्रिया और औसत समाधान समय`,
+    tags: ['बिजली', 'बिल', 'विद्युत', 'टैरिफ', 'hindi']
+  },
+  {
+    id: 'rti-water-hindi',
+    category: 'RTI',
+    department: 'जल आपूर्ति विभाग',
+    icon: Droplets,
+    title: 'पानी आपूर्ति और गुणवत्ता - हिंदी',
+    description: 'पानी आपूर्ति समय-सारणी, गुणवत्ता रिपोर्ट और बुनियादी ढांचे के बारे में जानकारी का अनुरोध करें।',
+    language: 'hindi',
+    sampleText: `मैं [आपका मोहल्ला/क्षेत्र] में जल आपूर्ति के संबंध में निम्नलिखित जानकारी का अनुरोध करता/करती हूं:
+
+1. दैनिक जल आपूर्ति समय-सारणी और अवधि
+2. पिछले 12 महीनों की पानी गुणवत्ता परीक्षण रिपोर्ट
+3. इस क्षेत्र को सेवा देने वाले जल शोधन संयंत्रों का विवरण
+4. पिछले वर्ष में प्राप्त और निपटाई गई शिकायतों की संख्या
+5. जल आपूर्ति बुनियादी ढांचे में सुधार की भविष्य की योजनाएं
+6. सरकारी मानकों के अनुसार प्रति व्यक्ति पानी उपलब्धता`,
+    tags: ['पानी', 'आपूर्ति', 'जल', 'नगरपालिका', 'hindi']
+  },
+  {
+    id: 'complaint-police-hindi',
+    category: 'Complaint',
+    department: 'पुलिस विभाग',
+    icon: Shield,
+    title: 'कानून व्यवस्था समस्या - हिंदी',
+    description: 'कानून व्यवस्था, उपद्रव या सुरक्षा संबंधी मुद्दों के बारे में शिकायत दर्ज करें।',
+    language: 'hindi',
+    sampleText: `मैं [आपका क्षेत्र] में एक गंभीर कानून व्यवस्था समस्या के बारे में आपका ध्यान आकर्षित करना चाहता/चाहती हूं:
+
+समस्या का स्वरूप:
+[समस्या का वर्णन करें - जैसे अवैध पार्किंग, शोर प्रदूषण, संदिग्ध गतिविधियां, छेड़छाड़ आदि]
+
+स्थान: [पूर्ण पता/लैंडमार्क]
+घटना का समय: [यह आमतौर पर कब होता है]
+अवधि: यह [तारीख] से चल रहा है
+
+प्रभाव:
+- [यह आपको और समुदाय को कैसे प्रभावित करता है]
+- [कोई सुरक्षा चिंता]
+
+मैं इस समस्या के समाधान के लिए तत्काल गश्त और आवश्यक कार्रवाई का अनुरोध करता/करती हूं। मैं किसी भी अतिरिक्त जानकारी प्रदान करने को तैयार हूं।`,
+    tags: ['पुलिस', 'सुरक्षा', 'कानून', 'शिकायत', 'hindi']
+  },
+  {
+    id: 'complaint-hospital-hindi',
+    category: 'Complaint',
+    department: 'स्वास्थ्य विभाग',
+    icon: HeartPulse,
+    title: 'सरकारी अस्पताल सेवाएं - हिंदी',
+    description: 'अस्पताल सेवाओं, कर्मचारी व्यवहार या चिकित्सा सुविधाओं के बारे में शिकायत दर्ज करें।',
+    language: 'hindi',
+    sampleText: `मैं [अस्पताल का नाम] की सेवाओं के संबंध में शिकायत दर्ज करना चाहता/चाहती हूं:
+
+भेंट की तारीख: [तारीख]
+OPD/वार्ड नंबर: [यदि लागू हो]
+
+सामना की गई समस्याएं:
+1. [समस्या का वर्णन करें - जैसे लंबा प्रतीक्षा समय, दवाओं की अनुपलब्धता, कर्मचारी व्यवहार]
+2. [अन्य समस्याएं]
+
+विवरण:
+[घटना का विशिष्ट विवरण प्रदान करें, यदि ज्ञात हो तो कर्मचारियों के नाम सहित]
+
+अपेक्षित समाधान:
+- सेवाओं में सुधार
+- संबंधित कर्मचारियों के खिलाफ अनुशासनात्मक कार्रवाई (यदि लागू हो)
+- लिखित स्पष्टीकरण
+
+मैं आपसे तत्काल हस्तक्षेप का अनुरोध करता/करती हूं ताकि मरीजों को उचित देखभाल और उपचार मिल सके।`,
+    tags: ['अस्पताल', 'स्वास्थ्य', 'चिकित्सा', 'सेवाएं', 'hindi']
+  },
+  {
+    id: 'complaint-municipal-hindi',
+    category: 'Complaint',
+    department: 'नगर निगम',
+    icon: Building2,
+    title: 'कचरा और स्वच्छता - हिंदी',
+    description: 'कचरा संग्रह, नाली या स्वच्छता संबंधी मुद्दों के बारे में शिकायत दर्ज करें।',
+    language: 'hindi',
+    sampleText: `मैं [आपका मोहल्ला] में एक स्वच्छता समस्या की ओर आपका तत्काल ध्यान आकर्षित करना चाहता/चाहती हूं:
+
+समस्या: [अनियमित कचरा संग्रह / उफनती नाली / खुले में कचरा फेंकना]
+
+स्थान: [लैंडमार्क के साथ पूर्ण पता]
+
+विवरण:
+- [तारीख/दिनों] से कचरा नहीं उठाया गया है
+- [वर्तमान स्थिति का वर्णन करें]
+- [स्वास्थ्य संबंधी खतरे]
+
+निवासियों पर प्रभाव:
+- दुर्गंध के कारण रहना मुश्किल हो रहा है
+- मच्छरों और मक्खियों का प्रजनन
+- बीमारियों का खतरा
+
+मैं तत्काल कार्रवाई का अनुरोध करता/करती हूं:
+1. जमा कचरा साफ करें/नाली खोलें
+2. आगे नियमित संग्रह/रखरखाव सुनिश्चित करें
+3. चूक के लिए जिम्मेदार लोगों के खिलाफ कार्रवाई करें`,
+    tags: ['कचरा', 'स्वच्छता', 'नगरपालिका', 'नाली', 'hindi']
   }
 ];
 
 const CATEGORIES = ['All', 'RTI', 'Complaint'];
+const LANGUAGES = ['All', 'English', 'Hindi'];
 
 const Templates = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedLanguage, setSelectedLanguage] = useState('All');
   const [expandedTemplate, setExpandedTemplate] = useState(null);
 
   const filteredTemplates = SAMPLE_TEMPLATES.filter(template => {
     const matchesCategory = selectedCategory === 'All' || template.category === selectedCategory;
+    const matchesLanguage = selectedLanguage === 'All' || 
+      (selectedLanguage === 'Hindi' && template.language === 'hindi') ||
+      (selectedLanguage === 'English' && !template.language);
     const matchesSearch = searchQuery === '' || 
       template.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       template.department.toLowerCase().includes(searchQuery.toLowerCase()) ||
       template.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
-    return matchesCategory && matchesSearch;
+    return matchesCategory && matchesLanguage && matchesSearch;
   });
 
   const handleCopyText = (text) => {
@@ -199,7 +340,8 @@ const Templates = () => {
     navigate(route, { 
       state: { 
         prefillDescription: template.sampleText,
-        documentType: template.category === 'RTI' ? 'information_request' : 'grievance'
+        documentType: template.category === 'RTI' ? 'information_request' : 'grievance',
+        language: template.language || 'english'
       } 
     });
   };
@@ -230,6 +372,17 @@ const Templates = () => {
               onClick={() => setSelectedCategory(cat)}
             >
               {cat}
+            </button>
+          ))}
+          <span className="filter-divider">|</span>
+          {LANGUAGES.map(lang => (
+            <button
+              key={lang}
+              className={`filter-btn lang-btn ${selectedLanguage === lang ? 'active' : ''}`}
+              onClick={() => setSelectedLanguage(lang)}
+            >
+              {lang === 'Hindi' && <Globe size={14} />}
+              {lang}
             </button>
           ))}
         </div>

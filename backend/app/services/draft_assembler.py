@@ -2,6 +2,7 @@
 Draft Assembler
 Fills legal templates with user data and extracted entities.
 AI ONLY fills placeholders - NEVER generates legal language.
+Supports English and Hindi templates.
 """
 
 from typing import Dict, Any, Optional, List
@@ -25,9 +26,10 @@ class DraftAssembler:
     - Templates define structure, headings, and legal wording
     - This class ONLY fills placeholders
     - NO generative AI is used for legal content
+    - Supports both English and Hindi templates
     """
     
-    # Map document types to template files
+    # Map document types to template files (English)
     TEMPLATE_MAP = {
         DocumentType.INFORMATION_REQUEST: "rti/information_request.txt",
         DocumentType.RECORDS_REQUEST: "rti/records_request.txt",
@@ -37,7 +39,15 @@ class DraftAssembler:
         DocumentType.FOLLOW_UP: "complaint/follow_up.txt",
     }
     
-    # Default placeholders when user hasn't provided specific info
+    # Map document types to Hindi template files
+    TEMPLATE_MAP_HINDI = {
+        DocumentType.INFORMATION_REQUEST: "rti/information_request_hindi.txt",
+        DocumentType.RECORDS_REQUEST: "rti/records_request_hindi.txt",
+        DocumentType.GRIEVANCE: "complaint/grievance_hindi.txt",
+        DocumentType.ESCALATION: "complaint/escalation_hindi.txt",
+    }
+    
+    # Default placeholders when user hasn't provided specific info (English)
     DEFAULT_PLACEHOLDERS = {
         "TIME_PERIOD": "the relevant period",
         "PAYMENT_MODE": "Indian Postal Order / Demand Draft / Online Payment",
@@ -48,22 +58,57 @@ class DraftAssembler:
         "START_DATE": "some time ago",
     }
     
+    # Default placeholders (Hindi)
+    DEFAULT_PLACEHOLDERS_HINDI = {
+        "TIME_PERIOD": "संबंधित अवधि",
+        "PAYMENT_MODE": "भारतीय पोस्टल ऑर्डर / डिमांड ड्राफ्ट / ऑनलाइन भुगतान",
+        "PROBLEM_DURATION": "काफी समय",
+        "PREVIOUS_ATTEMPTS": "इस मामले को हल करने के मेरे पूर्व प्रयास",
+        "IMPACT_DESCRIPTION": "यह समस्या काफी असुविधा पैदा कर रही है।",
+        "AFFECTED_LOCATION": "संबंधित क्षेत्र",
+        "START_DATE": "कुछ समय पहले",
+    }
+    
     def __init__(self):
-        self.templates: Dict[DocumentType, str] = {}
+        self.templates: Dict[str, str] = {}  # key: "doctype_lang"
         self._load_templates()
     
     def _load_templates(self):
-        """Load all templates from disk"""
+        """Load all templates from disk (English and Hindi)"""
+        # Load English templates
         for doc_type, template_path in self.TEMPLATE_MAP.items():
             full_path = TEMPLATE_DIR / template_path
             try:
                 if full_path.exists():
-                    self.templates[doc_type] = full_path.read_text(encoding="utf-8")
+                    key = f"{doc_type.value}_english"
+                    self.templates[key] = full_path.read_text(encoding="utf-8")
                     logger.info(f"Loaded template: {template_path}")
                 else:
                     logger.warning(f"Template not found: {template_path}")
             except Exception as e:
                 logger.error(f"Failed to load template {template_path}: {e}")
+        
+        # Load Hindi templates
+        for doc_type, template_path in self.TEMPLATE_MAP_HINDI.items():
+            full_path = TEMPLATE_DIR / template_path
+            try:
+                if full_path.exists():
+                    key = f"{doc_type.value}_hindi"
+                    self.templates[key] = full_path.read_text(encoding="utf-8")
+                    logger.info(f"Loaded Hindi template: {template_path}")
+                else:
+                    logger.warning(f"Hindi template not found: {template_path}")
+            except Exception as e:
+                logger.error(f"Failed to load Hindi template {template_path}: {e}")
+    
+    def _get_template(self, document_type: DocumentType, language: str) -> Optional[str]:
+        """Get template for document type and language, with fallback to English"""
+        key = f"{document_type.value}_{language}"
+        if key in self.templates:
+            return self.templates[key]
+        # Fallback to English
+        fallback_key = f"{document_type.value}_english"
+        return self.templates.get(fallback_key)
     
     def _extract_placeholders(self, template: str) -> List[str]:
         """Extract all placeholder names from a template"""
@@ -141,10 +186,12 @@ class DraftAssembler:
         time_period: Optional[str] = None,
         issue_category: Optional[str] = None,
         additional_context: Optional[Dict[str, str]] = None,
-        tone: str = "neutral"
+        tone: str = "neutral",
+        language: str = "english"
     ) -> Dict[str, Any]:
         """
         Assemble a complete draft by filling template placeholders.
+        Supports English and Hindi languages.
         
         Returns:
             Dict containing:
@@ -154,13 +201,17 @@ class DraftAssembler:
             - placeholders_missing: Placeholders that used defaults
             - word_count: Word count of draft
             - editable_sections: Sections user may want to edit
+            - language: Language used for the draft
         """
-        # Get template
-        if document_type not in self.templates:
-            logger.error(f"No template for document type: {document_type}")
+        # Get template for the specified language
+        template = self._get_template(document_type, language)
+        
+        if not template:
+            logger.error(f"No template for document type: {document_type}, language: {language}")
             raise ValueError(f"Template not found for {document_type}")
         
-        template = self.templates[document_type]
+        # Select default placeholders based on language
+        defaults = self.DEFAULT_PLACEHOLDERS_HINDI if language == "hindi" else self.DEFAULT_PLACEHOLDERS
         
         # Build placeholder values
         placeholders = {}
@@ -183,17 +234,17 @@ class DraftAssembler:
         if document_type in [DocumentType.INFORMATION_REQUEST, DocumentType.RECORDS_REQUEST, DocumentType.INSPECTION_REQUEST]:
             # RTI-specific placeholders
             placeholders["INFORMATION_REQUESTED"] = specific_request or issue_description
-            placeholders["TIME_PERIOD"] = time_period or self.DEFAULT_PLACEHOLDERS["TIME_PERIOD"]
-            placeholders["PAYMENT_MODE"] = self.DEFAULT_PLACEHOLDERS["PAYMENT_MODE"]
+            placeholders["TIME_PERIOD"] = time_period or defaults["TIME_PERIOD"]
+            placeholders["PAYMENT_MODE"] = defaults["PAYMENT_MODE"]
         else:
             # Complaint-specific placeholders
             placeholders["GRIEVANCE_DESCRIPTION"] = issue_description
-            placeholders["ISSUE_CATEGORY"] = issue_category or "Public Service Issue"
-            placeholders["AFFECTED_LOCATION"] = additional_context.get("location") if additional_context else self.DEFAULT_PLACEHOLDERS["AFFECTED_LOCATION"]
-            placeholders["PROBLEM_DURATION"] = time_period or self.DEFAULT_PLACEHOLDERS["PROBLEM_DURATION"]
-            placeholders["IMPACT_DESCRIPTION"] = additional_context.get("impact") if additional_context else self.DEFAULT_PLACEHOLDERS["IMPACT_DESCRIPTION"]
-            placeholders["START_DATE"] = additional_context.get("start_date") if additional_context else self.DEFAULT_PLACEHOLDERS["START_DATE"]
-            placeholders["PREVIOUS_ATTEMPTS"] = additional_context.get("previous_attempts") if additional_context else self.DEFAULT_PLACEHOLDERS["PREVIOUS_ATTEMPTS"]
+            placeholders["ISSUE_CATEGORY"] = issue_category or ("सार्वजनिक सेवा समस्या" if language == "hindi" else "Public Service Issue")
+            placeholders["AFFECTED_LOCATION"] = additional_context.get("location") if additional_context else defaults["AFFECTED_LOCATION"]
+            placeholders["PROBLEM_DURATION"] = time_period or defaults["PROBLEM_DURATION"]
+            placeholders["IMPACT_DESCRIPTION"] = additional_context.get("impact") if additional_context else defaults["IMPACT_DESCRIPTION"]
+            placeholders["START_DATE"] = additional_context.get("start_date") if additional_context else defaults["START_DATE"]
+            placeholders["PREVIOUS_ATTEMPTS"] = additional_context.get("previous_attempts") if additional_context else defaults["PREVIOUS_ATTEMPTS"]
         
         # Add any additional context
         if additional_context:
@@ -213,8 +264,8 @@ class DraftAssembler:
             if placeholder in placeholders and placeholders[placeholder]:
                 draft_text = draft_text.replace(f"{{{placeholder}}}", placeholders[placeholder])
                 placeholders_filled[placeholder] = placeholders[placeholder]
-            elif placeholder in self.DEFAULT_PLACEHOLDERS:
-                draft_text = draft_text.replace(f"{{{placeholder}}}", self.DEFAULT_PLACEHOLDERS[placeholder])
+            elif placeholder in defaults:
+                draft_text = draft_text.replace(f"{{{placeholder}}}", defaults[placeholder])
                 placeholders_missing.append(placeholder)
             elif placeholder == "APPLICANT_CONTACT":
                 # Remove empty contact placeholder entirely
@@ -239,7 +290,8 @@ class DraftAssembler:
         return {
             "draft_text": draft_text,
             "document_type": document_type.value,
-            "template_used": self.TEMPLATE_MAP[document_type],
+            "template_used": self.TEMPLATE_MAP.get(document_type, f"{document_type.value}_template"),
+            "language": language,
             "placeholders_filled": placeholders_filled,
             "placeholders_missing": placeholders_missing,
             "word_count": len(draft_text.split()),
@@ -247,13 +299,22 @@ class DraftAssembler:
             "generated_at": datetime.now().isoformat(),
         }
     
-    def get_template_preview(self, document_type: DocumentType) -> Optional[str]:
+    def get_template_preview(self, document_type: DocumentType, language: str = "english") -> Optional[str]:
         """Get a template preview for display"""
-        return self.templates.get(document_type)
+        return self._get_template(document_type, language)
     
     def list_available_templates(self) -> List[str]:
         """List all available template types"""
-        return [dt.value for dt in self.templates.keys()]
+        return list(self.templates.keys())
+    
+    def get_supported_languages(self, document_type: DocumentType) -> List[str]:
+        """Get list of supported languages for a document type"""
+        languages = []
+        if f"{document_type.value}_english" in self.templates:
+            languages.append("english")
+        if f"{document_type.value}_hindi" in self.templates:
+            languages.append("hindi")
+        return languages
 
 
 # Singleton instance

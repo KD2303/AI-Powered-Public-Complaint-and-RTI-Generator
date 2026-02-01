@@ -22,7 +22,7 @@ const AssistedMode = () => {
     applicant_email: '',
     issue_description: prefillData.prefillDescription || '',
     document_type: prefillData.documentType || 'information_request',
-    language: 'english',
+    language: prefillData.language || 'english',
     tone: 'neutral'
   });
 
