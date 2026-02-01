@@ -1,0 +1,236 @@
+.assisted-mode {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  min-height: 80vh;
+}
+
+.mode-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.mode-header h2 {
+  color: var(--text-main);
+  margin: 1rem 0 0.5rem 0;
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+}
+
+.mode-header p {
+  color: var(--text-light);
+  font-size: 1.1rem;
+}
+
+.split-screen {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  margin-top: 2rem;
+  height: calc(100% - 150px);
+}
+
+.input-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding-right: 1rem;
+  overflow-y: auto;
+  max-height: 800px;
+}
+
+.issue-input-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.issue-input-section label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.field-hint {
+  font-size: 0.9rem;
+  color: var(--text-light);
+  font-weight: 400;
+}
+
+.issue-input-section textarea {
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-md);
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.6;
+  resize: vertical;
+  background: white;
+  min-height: 200px;
+  transition: all 0.2s;
+}
+
+.issue-input-section textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+}
+
+.options-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.option-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.option-group label {
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.previous-rti-section {
+  padding: 1.25rem;
+  background: #f8fafc;
+  border-radius: var(--radius-md);
+  border: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.auto-draft-controls {
+  padding: 1.25rem;
+  background: #fffbef;
+  border-radius: var(--radius-md);
+  border: 1px solid #fef3c7;
+  color: #92400e;
+}
+
+.preview-panel {
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  background: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+}
+
+.preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.preview-header h3 {
+  color: var(--text-main);
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.preview-status {
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  background-color: #edf2f7;
+  color: var(--text-light);
+}
+
+.preview-status.generating {
+  background-color: #ebf8ff;
+  color: #3182ce;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+.status-updated {
+  color: #28a745;
+}
+
+.preview-notice {
+  background: #d1ecf1;
+  border: 1px solid #bee5eb;
+  color: #0c5460;
+  padding: 0.75rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.preview-error {
+  background: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+  padding: 1rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+}
+
+.preview-disabled,
+.preview-empty {
+  text-align: center;
+  padding: 3rem;
+  color: #888;
+}
+
+.finalize-step {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.finalize-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 2px solid #eee;
+}
+
+@media (max-width: 1024px) {
+  .split-screen {
+    grid-template-columns: 1fr;
+  }
+  
+  .preview-panel {
+    max-height: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .assisted-mode {
+    padding: 1rem;
+  }
+  
+  .options-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .finalize-actions {
+    flex-direction: column;
+  }
+}
