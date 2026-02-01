@@ -1,0 +1,33 @@
+To,
+The Public Information Officer,
+{DEPARTMENT_NAME}
+{DEPARTMENT_ADDRESS}
+
+Subject: Application for Information under RTI Act, 2005
+
+Respected Sir/Madam,
+
+I, {APPLICANT_NAME}, resident of {APPLICANT_ADDRESS}, hereby request the following information under the Right to Information Act, 2005:
+
+{INFORMATION_REQUESTED}
+
+The period for which information is sought: {TIME_PERIOD}
+
+I am an Indian citizen and the requested information is required for the purpose of transparency and accountability in public administration.
+
+I am enclosing the prescribed fee of Rs. 10/- (Rupees Ten Only) towards the application fee, payable via {PAYMENT_MODE}.
+
+In case the information sought involves any additional cost for providing copies of documents, I undertake to pay the same as prescribed under the RTI Act.
+
+I request you to kindly provide the above information within 30 days as stipulated under Section 7(1) of the RTI Act, 2005.
+
+Thanking you,
+
+Yours faithfully,
+
+{APPLICANT_NAME}
+{APPLICANT_ADDRESS}
+{APPLICANT_CONTACT}
+
+Date: {DATE}
+Place: {PLACE}

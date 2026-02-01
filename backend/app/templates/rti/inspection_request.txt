@@ -1,0 +1,33 @@
+To,
+The Public Information Officer,
+{DEPARTMENT_NAME}
+{DEPARTMENT_ADDRESS}
+
+Subject: Request for Inspection of Records under Section 2(j) of RTI Act, 2005
+
+Respected Sir/Madam,
+
+I, {APPLICANT_NAME}, resident of {APPLICANT_ADDRESS}, hereby request permission to inspect the following records/documents under Section 2(j) of the Right to Information Act, 2005:
+
+{RECORDS_FOR_INSPECTION}
+
+Purpose of Inspection: {PURPOSE}
+
+Preferred Date and Time for Inspection: {PREFERRED_DATE}
+
+I am an Indian citizen and request the opportunity to inspect the above-mentioned records as provided under the RTI Act.
+
+I am enclosing the prescribed fee of Rs. 10/- (Rupees Ten Only) towards the application fee.
+
+I request you to kindly grant permission for inspection and inform me of the scheduled date and time at your earliest convenience.
+
+Thanking you,
+
+Yours faithfully,
+
+{APPLICANT_NAME}
+{APPLICANT_ADDRESS}
+{APPLICANT_CONTACT}
+
+Date: {DATE}
+Place: {PLACE}

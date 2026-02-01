@@ -1,0 +1,30 @@
+# Core Framework
+fastapi
+uvicorn[standard]
+pydantic
+python-dotenv
+loguru
+
+# NLP & AI
+spacy
+spacy-lookups-data
+transformers
+torch
+numpy
+scikit-learn
+
+# Indic Language Support
+indic-nlp-library
+langdetect
+regex
+unidecode
+python-dateutil
+
+# Document Generation
+reportlab
+python-docx
+openpyxl
+aiofiles
+
+# Testing
+pytest

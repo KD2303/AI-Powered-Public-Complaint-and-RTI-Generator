@@ -1,0 +1,39 @@
+To,
+{AUTHORITY_DESIGNATION}
+{DEPARTMENT_NAME}
+{DEPARTMENT_ADDRESS}
+
+Subject: Grievance Regarding {ISSUE_CATEGORY}
+
+Respected Sir/Madam,
+
+I, {APPLICANT_NAME}, resident of {APPLICANT_ADDRESS}, wish to bring to your kind attention the following grievance:
+
+DETAILS OF GRIEVANCE:
+{GRIEVANCE_DESCRIPTION}
+
+LOCATION/AREA AFFECTED:
+{AFFECTED_LOCATION}
+
+DURATION OF PROBLEM:
+{PROBLEM_DURATION}
+
+IMPACT:
+{IMPACT_DESCRIPTION}
+
+I have been facing this issue since {START_DATE} and despite {PREVIOUS_ATTEMPTS}, the matter remains unresolved.
+
+I humbly request you to look into this matter on priority and take appropriate action to resolve the grievance at the earliest.
+
+I am willing to provide any additional information or documents that may be required to address this issue.
+
+Thanking you,
+
+Yours faithfully,
+
+{APPLICANT_NAME}
+{APPLICANT_ADDRESS}
+{APPLICANT_CONTACT}
+
+Date: {DATE}
+Place: {PLACE}

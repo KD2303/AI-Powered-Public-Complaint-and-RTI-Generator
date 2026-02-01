@@ -1,0 +1,39 @@
+To,
+{AUTHORITY_DESIGNATION}
+{DEPARTMENT_NAME}
+{DEPARTMENT_ADDRESS}
+
+Subject: Follow-up on Pending Complaint - Reference No. {COMPLAINT_NUMBER}
+
+Respected Sir/Madam,
+
+I, {APPLICANT_NAME}, resident of {APPLICANT_ADDRESS}, wish to follow up on my complaint submitted on {ORIGINAL_COMPLAINT_DATE}.
+
+COMPLAINT REFERENCE:
+- Complaint Number: {COMPLAINT_NUMBER}
+- Date of Submission: {ORIGINAL_COMPLAINT_DATE}
+- Subject: {ORIGINAL_SUBJECT}
+
+ORIGINAL ISSUE:
+{GRIEVANCE_SUMMARY}
+
+CURRENT STATUS:
+It has been {DAYS_ELAPSED} days since I submitted my complaint, and I have not received any update or resolution regarding the same.
+
+I kindly request you to:
+1. Provide the current status of my complaint
+2. Inform me of the expected timeline for resolution
+3. Share contact details of the officer handling my case
+
+I remain hopeful that my grievance will be addressed at the earliest.
+
+Thanking you,
+
+Yours faithfully,
+
+{APPLICANT_NAME}
+{APPLICANT_ADDRESS}
+{APPLICANT_CONTACT}
+
+Date: {DATE}
+Place: {PLACE}
