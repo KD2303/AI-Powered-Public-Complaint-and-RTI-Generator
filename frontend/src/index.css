@@ -1,0 +1,68 @@
+:root {
+  /* Colors */
+  --color-primary: #0f62fe;        /* Blue 60 */
+  --color-primary-hover: #0353e9;
+  --color-secondary: #24a148;      /* Green 60 */
+  --color-secondary-hover: #198038;
+  --color-bg: #ffffff;
+  --color-bg-subtle: #f4f4f4;      /* Gray 10 */
+  --color-text-body: #161616;      /* Gray 100 */
+  --color-text-heading: #000000;
+  --color-text-light: #525252;     /* Gray 60 */
+  --color-border: #e0e0e0;         /* Gray 20 */
+  --color-error: #da1e28;          /* Red 60 */
+  --color-warning: #f1c21b;        /* Yellow 20 */
+
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+
+  /* Typography */
+  --font-family-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  --font-family-mono: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-bg);
+  color: var(--color-text-body);
+  line-height: 1.5;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-text-heading);
+  font-weight: 600;
+  line-height: 1.25;
+  margin-bottom: var(--spacing-md);
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+button {
+  font-family: inherit;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+code {
+  font-family: var(--font-family-mono);
+}

@@ -1,0 +1,33 @@
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+// Layouts
+import MainLayout from './layouts/MainLayout/MainLayout';
+
+// Pages
+import Home from './pages/Home/Home';
+import GuidedMode from './pages/GuidedMode/GuidedMode';
+import AssistedMode from './pages/AssistedMode/AssistedMode';
+
+import './App.css';
+
+function App() {
+  return (
+    <Router>
+      <div className="App">
+        <MainLayout>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/guided" element={<GuidedMode />} />
+            <Route path="/assisted" element={<AssistedMode />} />
+          </Routes>
+        </MainLayout>
+        <ToastContainer position="bottom-right" />
+      </div>
+    </Router>
+  );
+}
+
+export default App;

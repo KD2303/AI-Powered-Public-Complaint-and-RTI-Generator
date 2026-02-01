@@ -1,0 +1,40 @@
+.assisted-mode {
+    padding-top: 1rem;
+    padding-bottom: 4rem;
+  }
+  
+  .header-section {
+    margin-bottom: 2rem;
+  }
+  
+  .split-view {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+  
+  @media (max-width: 900px) {
+    .split-view {
+      grid-template-columns: 1fr;
+    }
+    
+    .input-panel {
+      order: 1;
+    }
+    
+    .preview-panel {
+      order: 2;
+    }
+  }
+  
+  .input-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .preview-panel {
+    position: sticky;
+    top: 5rem;
+    height: fit-content;
+  }

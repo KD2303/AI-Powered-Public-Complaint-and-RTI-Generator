@@ -1,0 +1,65 @@
+.guided-mode {
+  padding-top: 2rem;
+  padding-bottom: 4rem;
+  max-width: 800px;
+}
+
+.progress-bar-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 3rem;
+}
+
+.progress-step {
+  font-weight: 500;
+  color: var(--color-text-light);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+}
+
+.progress-step.active {
+  background-color: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.line {
+  flex: 1;
+  height: 2px;
+  background-color: var(--color-border);
+  margin: 0 1rem;
+}
+
+.step-content h2 {
+    margin-bottom: 1.5rem;
+}
+
+.navigation-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.radio-card {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.radio-card:hover {
+    border-color: var(--color-primary);
+    background-color: rgba(15, 98, 254, 0.05);
+}
+
+.radio-card input {
+    width: 1.25rem;
+    height: 1.25rem;
+}

@@ -1,0 +1,189 @@
+import React, { useState } from 'react';
+import { toast } from 'react-toastify';
+import { generateDraft } from '../../services/draftService';
+import ApplicantForm from '../../components/ApplicantForm/ApplicantForm';
+import DraftPreview from '../../components/DraftPreview/DraftPreview';
+import DownloadPanel from '../../components/DownloadPanel/DownloadPanel';
+import './GuidedMode.css';
+
+const GuidedMode = () => {
+  const [step, setStep] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [draft, setDraft] = useState(null);
+  
+  const [formData, setFormData] = useState({
+    applicant_name: '',
+    applicant_address: '',
+    applicant_state: '',
+    applicant_phone: '',
+    applicant_email: '',
+    // Guided specific fields
+    intent: '', // 'info' or 'complaint'
+    issue_description: '',
+    department_hint: '',
+    time_period: '',
+    // Output fields
+    document_type: 'information_request',
+    language: 'english',
+    tone: 'neutral'
+  });
+
+  const nextStep = () => {
+    // Validation
+    if (step === 1) {
+      if (!formData.applicant_name || !formData.applicant_address || !formData.applicant_state) {
+        toast.error("Please fill in all required applicant details.");
+        return;
+      }
+    }
+    
+    if (step === 2) {
+       if (!formData.intent || !formData.issue_description) {
+         toast.error("Please answer the required questions.");
+         return;
+       }
+       // Determine document type based on intent
+       const docType = formData.intent === 'info' ? 'information_request' : 'grievance';
+       // We can trigger generation here
+       generateDocument({ ...formData, document_type: docType });
+    }
+
+    setStep(step + 1);
+  };
+
+  const prevStep = () => setStep(step - 1);
+
+  const generateDocument = async (data) => {
+    setLoading(true);
+    try {
+      const result = await generateDraft(data);
+      setDraft(result);
+    } catch (err) {
+      toast.error("Failed to generate draft. Please try again.");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const renderStep = () => {
+    switch(step) {
+      case 1:
+        return (
+          <div className="step-content">
+            <h2>Step 1: Who are you?</h2>
+            <p className="text-muted mb-4">We need your details to address the application correctly.</p>
+            <ApplicantForm data={formData} onChange={setFormData} />
+          </div>
+        );
+      case 2:
+        return (
+          <div className="step-content">
+            <h2>Step 2: What is the issue?</h2>
+            <div className="card">
+              <div className="input-group">
+                <label className="input-label">What do you want to do? *</label>
+                <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
+                    <label className="radio-card">
+                        <input 
+                            type="radio" 
+                            name="intent" 
+                            value="info"
+                            checked={formData.intent === 'info'}
+                            onChange={(e) => setFormData({...formData, intent: e.target.value})}
+                        />
+                        <span>Ask for Information (RTI)</span>
+                    </label>
+                    <label className="radio-card">
+                        <input 
+                            type="radio" 
+                            name="intent" 
+                            value="complaint"
+                            checked={formData.intent === 'complaint'}
+                            onChange={(e) => setFormData({...formData, intent: e.target.value})}
+                        />
+                        <span>File a Complaint</span>
+                    </label>
+                </div>
+              </div>
+
+              <div className="input-group">
+                <label className="input-label">
+                    {formData.intent === 'complaint' ? "Describe your grievance *" : "What information do you need? *"}
+                </label>
+                <textarea
+                  className="form-textarea"
+                  rows="4"
+                  value={formData.issue_description}
+                  onChange={(e) => setFormData({...formData, issue_description: e.target.value})}
+                  placeholder="Be specific about dates, names, and places."
+                />
+              </div>
+
+               <div className="input-group">
+                <label className="input-label">Which department is involved? (Optional)</label>
+                <input
+                  type="text"
+                  className="form-input"
+                  value={formData.department_hint}
+                  onChange={(e) => setFormData({...formData, department_hint: e.target.value})}
+                  placeholder="e.g. Municipal Corporation, Police, Electricity Board"
+                />
+              </div>
+            </div>
+          </div>
+        );
+      case 3:
+        return (
+           <div className="step-content">
+              <h2>Step 3: Review your Draft</h2>
+              {loading ? (
+                <div className="text-center p-5">Creating your document...</div>
+              ) : draft ? (
+                <>
+                   <DraftPreview 
+                     draftText={draft.draft_text} 
+                     onEdit={(text) => setDraft({...draft, draft_text: text})} 
+                   />
+                   <div className="mt-4">
+                     <DownloadPanel draftData={{...formData, draft_text: draft.draft_text}} />
+                   </div>
+                </>
+              ) : (
+                <div className="text-center p-5 text-error">Something went wrong.</div>
+              )}
+           </div>
+        );
+      default: return null;
+    }
+  };
+
+  return (
+    <div className="container guided-mode">
+       <div className="progress-bar-container">
+          <div className={`progress-step ${step >= 1 ? 'active' : ''}`}>1. Personal Details</div>
+          <div className="line"></div>
+          <div className={`progress-step ${step >= 2 ? 'active' : ''}`}>2. The Issue</div>
+          <div className="line"></div>
+          <div className={`progress-step ${step >= 3 ? 'active' : ''}`}>3. Review</div>
+       </div>
+
+       {renderStep()}
+
+       <div className="navigation-buttons mt-4">
+          {step > 1 && (
+             <button className="btn btn-secondary" onClick={prevStep} disabled={loading}>
+                Back
+             </button>
+          )}
+          {step < 3 && (
+             <button className="btn btn-primary" onClick={nextStep}>
+                Next Step
+             </button>
+          )}
+       </div>
+    </div>
+  );
+};
+
+export default GuidedMode;
