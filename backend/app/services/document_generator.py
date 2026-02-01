@@ -78,10 +78,10 @@ class DocumentGenerator:
         doc = SimpleDocTemplate(
             buffer,
             pagesize=A4,
-            rightMargin=0.75 * inch,
-            leftMargin=0.75 * inch,
-            topMargin=0.75 * inch,
-            bottomMargin=0.75 * inch
+            rightMargin=1.0 * inch,
+            leftMargin=1.0 * inch,
+            topMargin=1.0 * inch,
+            bottomMargin=1.0 * inch
         )
         
         # Styles
@@ -94,24 +94,24 @@ class DocumentGenerator:
             fontSize=14,
             spaceAfter=20,
             alignment=TA_CENTER,
-            fontName='Helvetica-Bold'
+            fontName='Times-Bold'
         )
         
         body_style = ParagraphStyle(
             'CustomBody',
             parent=styles['Normal'],
-            fontSize=11,
-            leading=16,
+            fontSize=12,
+            leading=18,  # 1.5 line spacing
             alignment=TA_JUSTIFY,
-            fontName='Helvetica',
+            fontName='Times-Roman',
             spaceAfter=12
         )
         
         subject_style = ParagraphStyle(
             'Subject',
             parent=styles['Normal'],
-            fontSize=11,
-            fontName='Helvetica-Bold',
+            fontSize=12,
+            fontName='Times-Bold',
             spaceAfter=12,
             spaceBefore=12
         )
