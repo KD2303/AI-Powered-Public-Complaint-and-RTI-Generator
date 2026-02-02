@@ -9,7 +9,6 @@ import {
   GitBranch,
   Users,
   Lock,
-  AlertTriangle,
   BookOpen,
   ClipboardList,
   XCircle
