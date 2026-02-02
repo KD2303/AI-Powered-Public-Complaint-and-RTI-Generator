@@ -72,7 +72,7 @@ class Settings(BaseSettings):
     # NLP Configuration
     # ===================
     SPACY_MODEL: str = Field(default="en_core_web_sm", description="spaCy model to use")
-    ENABLE_DISTILBERT: bool = Field(default=True, description="Enable DistilBERT for semantic analysis")
+    ENABLE_DISTILBERT: bool = Field(default=False, description="Enable DistilBERT for semantic analysis (memory intensive)")
     DISTILBERT_MODEL: str = Field(default="distilbert-base-uncased", description="DistilBERT model")
     
     # ===================
