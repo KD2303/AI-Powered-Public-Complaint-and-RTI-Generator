@@ -4,10 +4,11 @@ Production-grade settings loaded from environment variables.
 All sensitive values must come from environment, not hardcoded.
 """
 
-from pydantic_settings import BaseSettings
-from pydantic import Field
-from typing import Optional, List
+from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic import Field, field_validator
+from typing import Optional, List, Union
 from functools import lru_cache
+import json
 
 
 class Settings(BaseSettings):
@@ -33,12 +34,25 @@ class Settings(BaseSettings):
     # CORS Configuration
     # ===================
     CORS_ORIGINS: List[str] = Field(
-        default=["http://localhost:3000", "http://127.0.0.1:3000"],
-        description="Allowed CORS origins"
+        default=["http://localhost:3000", "http://127.0.0.1:3000", "https://*.vercel.app"],
+        description="Allowed CORS origins - set via CORS_ORIGINS env var for production"
     )
     CORS_ALLOW_CREDENTIALS: bool = True
-    CORS_ALLOW_METHODS: List[str] = ["GET", "POST", "OPTIONS"]
+    CORS_ALLOW_METHODS: List[str] = ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
     CORS_ALLOW_HEADERS: List[str] = ["*"]
+    
+    @field_validator("CORS_ORIGINS", mode="before")
+    @classmethod
+    def parse_cors_origins(cls, v: Union[str, List[str]]) -> List[str]:
+        """Parse CORS_ORIGINS from JSON string or return list as-is"""
+        if isinstance(v, str):
+            try:
+                # Try parsing as JSON array
+                return json.loads(v)
+            except json.JSONDecodeError:
+                # Fall back to comma-separated values
+                return [origin.strip() for origin in v.split(",") if origin.strip()]
+        return v
     
     # ===================
     # NLP Configuration
@@ -86,17 +100,43 @@ class Settings(BaseSettings):
     API_KEY_HEADER: str = Field(default="X-API-Key", description="API key header name")
     API_KEYS: List[str] = Field(default=[], description="Valid API keys")
     
+    @field_validator("API_KEYS", mode="before")
+    @classmethod
+    def parse_api_keys(cls, v: Union[str, List[str]]) -> List[str]:
+        """Parse API_KEYS from JSON string or return list as-is"""
+        if isinstance(v, str):
+            try:
+                return json.loads(v)
+            except json.JSONDecodeError:
+                return [key.strip() for key in v.split(",") if key.strip()]
+        return v
+    
+    # ===================
+    # OpenAI Configuration (LLM Assistant - NOT Authority)
+    # ===================
+    OPENAI_API_KEY: Optional[str] = Field(default=None, description="OpenAI API key for LLM enhancement")
+    OPENAI_MODEL: str = Field(default="gpt-4o-mini", description="OpenAI model to use")
+    OPENAI_MAX_TOKENS: int = Field(default=1500, description="Max tokens for LLM response")
+    OPENAI_TEMPERATURE: float = Field(default=0.3, description="Low temperature for consistent legal language")
+    ENABLE_LLM_ENHANCEMENT: bool = Field(default=True, description="Enable LLM text enhancement")
+    LLM_ENHANCEMENT_MODE: str = Field(default="polish", description="polish, translate, clarify")
+    
     # ===================
     # Feature Flags
     # ===================
-    FEATURE_HINDI_SUPPORT: bool = Field(default=False, description="Enable Hindi language support")
+    FEATURE_HINDI_SUPPORT: bool = Field(default=True, description="Enable Hindi language support")
     FEATURE_XLSX_EXPORT: bool = Field(default=True, description="Enable XLSX export")
     FEATURE_AUDIT_LOG: bool = Field(default=True, description="Enable audit logging")
+    FEATURE_LLM_ASSIST: bool = Field(default=True, description="Enable LLM assistance for text improvement")
     
-    class Config:
-        env_file = ".env"
-        env_file_encoding = "utf-8"
-        case_sensitive = True
+    model_config = SettingsConfigDict(
+        env_file="../.env",
+        env_file_encoding="utf-8",
+        case_sensitive=True,
+        extra="ignore",
+        # This tells pydantic-settings to parse JSON strings for complex types
+        json_schema_extra={"env_parse_none_str": "null"},
+    )
         
     def is_production(self) -> bool:
         """Check if running in production"""
