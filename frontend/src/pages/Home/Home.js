@@ -23,49 +23,93 @@ const Home = () => {
       {/* ===== HERO SECTION ===== */}
       <section className="hero-section">
         <div className="container">
-          <div className="hero-content">
-            <div className="system-badge">
-              <Shield size={14} />
-              <span>Rule-Based Civic Drafting System</span>
+          <div className="hero-wrapper">
+            <div className="hero-content">
+              <div className="system-badge">
+                <Shield size={14} />
+                <span>Rule-Based Civic Drafting System</span>
+              </div>
+
+              <h1 className="hero-title">
+                Draft RTI Applications Using<br />
+                Enforced Legal Structure
+              </h1>
+
+              <p className="hero-subtitle">
+                CivicDraft generates legally compliant RTI applications and public complaints
+                through deterministic rule validation — not generative AI guesswork.
+                Every draft follows the structure mandated by the RTI Act, 2005.
+              </p>
+
+              <div className="hero-actions">
+                <button
+                  className="btn btn-primary"
+                  onClick={() => navigate('/guided')}
+                >
+                  <ClipboardList size={18} />
+                  Start Guided Draft
+                </button>
+                <Link to="/templates" className="btn btn-secondary">
+                  <BookOpen size={18} />
+                  View RTI Structure
+                </Link>
+              </div>
+
+              <div className="hero-guarantees">
+                <div className="guarantee-item">
+                  <CheckCircle2 size={16} />
+                  <span>Section 6(1) Compliant</span>
+                </div>
+                <div className="guarantee-item">
+                  <CheckCircle2 size={16} />
+                  <span>Authority Auto-Resolved</span>
+                </div>
+                <div className="guarantee-item">
+                  <CheckCircle2 size={16} />
+                  <span>No Data Stored</span>
+                </div>
+              </div>
             </div>
 
-            <h1 className="hero-title">
-              Draft RTI Applications Using<br />
-              Enforced Legal Structure
-            </h1>
+            {/* Document Preview Mockup */}
+            <div className="hero-preview">
+              <div className="document-mockup">
+                <div className="document-header">
+                  <div className="doc-line doc-line-title"></div>
+                  <div className="doc-line doc-line-subtitle"></div>
+                </div>
+                
+                <div className="document-body">
+                  <div className="doc-section">
+                    <div className="doc-line doc-line-label"></div>
+                    <div className="doc-line doc-line-full"></div>
+                    <div className="doc-line doc-line-full"></div>
+                    <div className="doc-line doc-line-medium"></div>
+                  </div>
 
-            <p className="hero-subtitle">
-              CivicDraft generates legally compliant RTI applications and public complaints
-              through deterministic rule validation — not generative AI guesswork.
-              Every draft follows the structure mandated by the RTI Act, 2005.
-            </p>
+                  <div className="doc-section">
+                    <div className="doc-line doc-line-label"></div>
+                    <div className="doc-line doc-line-full"></div>
+                    <div className="doc-line doc-line-full"></div>
+                    <div className="doc-line doc-line-full"></div>
+                    <div className="doc-line doc-line-short"></div>
+                  </div>
 
-            <div className="hero-actions">
-              <button
-                className="btn btn-primary"
-                onClick={() => navigate('/guided')}
-              >
-                <ClipboardList size={18} />
-                Start Guided Draft
-              </button>
-              <Link to="/templates" className="btn btn-secondary">
-                <BookOpen size={18} />
-                View RTI Structure
-              </Link>
-            </div>
+                  <div className="doc-section">
+                    <div className="doc-line doc-line-label"></div>
+                    <div className="doc-line doc-line-medium"></div>
+                  </div>
+                </div>
 
-            <div className="hero-guarantees">
-              <div className="guarantee-item">
-                <CheckCircle2 size={16} />
-                <span>Section 6(1) Compliant</span>
-              </div>
-              <div className="guarantee-item">
-                <CheckCircle2 size={16} />
-                <span>Authority Auto-Resolved</span>
-              </div>
-              <div className="guarantee-item">
-                <CheckCircle2 size={16} />
-                <span>No Data Stored</span>
+                <div className="document-footer">
+                  <div className="doc-line doc-line-short"></div>
+                  <div className="doc-line doc-line-medium"></div>
+                </div>
+
+                <div className="document-badge">
+                  <CheckCircle2 size={14} />
+                  <span>RTI Act 2005</span>
+                </div>
               </div>
             </div>
           </div>
