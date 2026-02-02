@@ -1,8 +1,7 @@
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { 
-  Shield, 
-  FileCheck, 
+import {
+  Shield,
   Scale,
   CheckCircle2,
   ArrowRight,
@@ -13,7 +12,6 @@ import {
   AlertTriangle,
   BookOpen,
   ClipboardList,
-  Sparkles,
   XCircle
 } from 'lucide-react';
 import './Home.css';
@@ -31,20 +29,20 @@ const Home = () => {
               <Shield size={14} />
               <span>Rule-Based Civic Drafting System</span>
             </div>
-            
+
             <h1 className="hero-title">
               Draft RTI Applications Using<br />
               Enforced Legal Structure
             </h1>
-            
+
             <p className="hero-subtitle">
-              CivicDraft generates legally compliant RTI applications and public complaints 
-              through deterministic rule validation — not generative AI guesswork. 
+              CivicDraft generates legally compliant RTI applications and public complaints
+              through deterministic rule validation — not generative AI guesswork.
               Every draft follows the structure mandated by the RTI Act, 2005.
             </p>
-            
+
             <div className="hero-actions">
-              <button 
+              <button
                 className="btn btn-primary"
                 onClick={() => navigate('/guided')}
               >
@@ -75,149 +73,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ===== TWO-LAYER SYSTEM ===== */}
-      <section className="system-section">
-        <div className="container">
-          <div className="section-header">
-            <h2>How This System Works</h2>
-            <p className="section-description">
-              CivicDraft operates on a two-layer architecture. The rule engine is authoritative; 
-              AI assistance is optional and subordinate.
-            </p>
-          </div>
-
-          <div className="two-layer-grid">
-            {/* Rule Engine Layer */}
-            <div className="layer-card layer-primary">
-              <div className="layer-badge">Core Layer</div>
-              <div className="layer-icon">
-                <Scale size={28} />
-              </div>
-              <h3>Rule-Based Engine</h3>
-              <p>
-                All legal structure, authority mapping, and compliance checks are enforced 
-                by deterministic rules — not learned from data.
-              </p>
-              <ul className="layer-features">
-                <li>
-                  <FileCheck size={16} />
-                  <span>Validates against RTI Act Section 6(1) requirements</span>
-                </li>
-                <li>
-                  <GitBranch size={16} />
-                  <span>Maps issues to correct Public Information Officers</span>
-                </li>
-                <li>
-                  <Shield size={16} />
-                  <span>Enforces canonical document structure</span>
-                </li>
-              </ul>
-              <div className="layer-status">
-                <span className="status-dot active"></span>
-                Always Active
-              </div>
-            </div>
-
-            {/* AI Layer */}
-            <div className="layer-card layer-secondary">
-              <div className="layer-badge">Support Layer</div>
-              <div className="layer-icon">
-                <Sparkles size={28} />
-              </div>
-              <h3>AI Assistance (Optional)</h3>
-              <p>
-                Language model suggestions for clarity and tone. 
-                AI cannot modify legal structure or override rule decisions.
-              </p>
-              <ul className="layer-features">
-                <li>
-                  <CheckCircle2 size={16} />
-                  <span>Improves grammar and readability</span>
-                </li>
-                <li>
-                  <CheckCircle2 size={16} />
-                  <span>Suggests formal tone adjustments</span>
-                </li>
-                <li>
-                  <XCircle size={16} className="text-muted" />
-                  <span className="text-muted">Cannot change legal sections or authority</span>
-                </li>
-              </ul>
-              <div className="layer-status">
-                <span className="status-dot optional"></span>
-                User-Controlled
-              </div>
-            </div>
-          </div>
-
-          <div className="system-note">
-            <AlertTriangle size={16} />
-            <span>
-              <strong>Important:</strong> AI suggestions pass through rule-based revalidation 
-              before being included in any draft. The system rejects changes that violate compliance.
-            </span>
-          </div>
-        </div>
-      </section>
-
-      {/* ===== DETERMINISTIC FLOW ===== */}
-      <section className="flow-section">
-        <div className="container">
-          <div className="section-header">
-            <h2>The Drafting Process</h2>
-            <p className="section-description">
-              A transparent, step-by-step process with no hidden logic.
-            </p>
-          </div>
-
-          <div className="flow-steps">
-            <div className="flow-step">
-              <div className="step-number">1</div>
-              <div className="step-content">
-                <h4>Input</h4>
-                <p>You describe your issue in plain language</p>
-              </div>
-            </div>
-            <div className="flow-arrow">→</div>
-            
-            <div className="flow-step">
-              <div className="step-number">2</div>
-              <div className="step-content">
-                <h4>Validation</h4>
-                <p>Rules check completeness and classify intent</p>
-              </div>
-            </div>
-            <div className="flow-arrow">→</div>
-            
-            <div className="flow-step">
-              <div className="step-number">3</div>
-              <div className="step-content">
-                <h4>Canonical Draft</h4>
-                <p>System generates compliant structure</p>
-              </div>
-            </div>
-            <div className="flow-arrow">→</div>
-            
-            <div className="flow-step">
-              <div className="step-number">4</div>
-              <div className="step-content">
-                <h4>AI Polish</h4>
-                <p>Optional language enhancement</p>
-              </div>
-            </div>
-            <div className="flow-arrow">→</div>
-            
-            <div className="flow-step">
-              <div className="step-number">5</div>
-              <div className="step-content">
-                <h4>Revalidation</h4>
-                <p>Final compliance check before output</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* ===== MODES OF USE ===== */}
       <section className="modes-section">
         <div className="container">
@@ -238,7 +93,7 @@ const Home = () => {
               </div>
               <h3>Guided Mode</h3>
               <p className="mode-description">
-                Answer structured questions. The system builds your draft from validated inputs. 
+                Answer structured questions. The system builds your draft from validated inputs.
                 No AI involved — pure rule-based generation.
               </p>
               <ul className="mode-details">
@@ -262,7 +117,7 @@ const Home = () => {
               </div>
               <h3>Assisted Mode</h3>
               <p className="mode-description">
-                Write freely, and the system extracts structured data. 
+                Write freely, and the system extracts structured data.
                 Optional AI enhancement for language polish only.
               </p>
               <ul className="mode-details">
@@ -279,6 +134,66 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      {/* ===== DETERMINISTIC FLOW ===== */}
+      <section className="flow-section">
+        <div className="container">
+          <div className="section-header">
+            <h2>The Drafting Process</h2>
+            <p className="section-description">
+              A transparent, step-by-step process with no hidden logic.
+            </p>
+          </div>
+
+          <div className="flow-steps">
+            <div className="flow-step">
+              <div className="step-number">1</div>
+              <div className="step-content">
+                <h4>Input</h4>
+                <p>You describe your issue in plain language</p>
+              </div>
+            </div>
+            <div className="flow-arrow">→</div>
+
+            <div className="flow-step">
+              <div className="step-number">2</div>
+              <div className="step-content">
+                <h4>Validation</h4>
+                <p>Rules check completeness and classify intent</p>
+              </div>
+            </div>
+            <div className="flow-arrow">→</div>
+
+            <div className="flow-step">
+              <div className="step-number">3</div>
+              <div className="step-content">
+                <h4>Canonical Draft</h4>
+                <p>System generates compliant structure</p>
+              </div>
+            </div>
+            <div className="flow-arrow">→</div>
+
+            <div className="flow-step">
+              <div className="step-number">4</div>
+              <div className="step-content">
+                <h4>AI Polish</h4>
+                <p>Optional language enhancement</p>
+              </div>
+            </div>
+            <div className="flow-arrow">→</div>
+
+            <div className="flow-step">
+              <div className="step-number">5</div>
+              <div className="step-content">
+                <h4>Revalidation</h4>
+                <p>Final compliance check before output</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
 
       {/* ===== LIMITATIONS ===== */}
       <section className="limitations-section">
@@ -365,7 +280,7 @@ const Home = () => {
               </div>
               <h4>Explainable Decisions</h4>
               <p>
-                Every authority mapping and document structure decision can be traced 
+                Every authority mapping and document structure decision can be traced
                 to specific rules — not opaque model weights.
               </p>
             </div>
@@ -375,7 +290,7 @@ const Home = () => {
               </div>
               <h4>Privacy-First Design</h4>
               <p>
-                No account required. No data stored after session. 
+                No account required. No data stored after session.
                 Your civic actions remain private.
               </p>
             </div>
@@ -385,7 +300,7 @@ const Home = () => {
               </div>
               <h4>Open Rule Logic</h4>
               <p>
-                The rule engine logic is auditable. 
+                The rule engine logic is auditable.
                 No hidden prompt engineering or unexplainable AI behavior.
               </p>
             </div>
@@ -399,10 +314,10 @@ const Home = () => {
           <div className="cta-content">
             <h2>Ready to Draft Your Application?</h2>
             <p>
-              Start with Guided Mode for a structured, step-by-step experience. 
+              Start with Guided Mode for a structured, step-by-step experience.
               No account needed.
             </p>
-            <button 
+            <button
               className="btn btn-primary btn-lg"
               onClick={() => navigate('/guided')}
             >
